@@ -32,67 +32,67 @@ def my_view_function(request):
     # else:
     #     # Handle invalid HTTP method
     #     return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
-def category_group_by_view(request):
-    category_counts = Category_subcategory.objects.values('sub_category').annotate(num_occurrences=Count('category')).filter(num_occurrences__gt=2)
-    context = {
-        'category_counts': category_counts
-    }
-    return render(request, 'category_group_by.html', context)
+# def category_group_by_view(request):
+#     category_counts = Category_subcategory.objects.values('sub_category').annotate(num_occurrences=Count('category')).filter(num_occurrences__gt=2)
+#     context = {
+#         'category_counts': category_counts
+#     }
+#     return render(request, 'category_group_by.html', context)
 
-@csrf_exempt
-def category_post_api(request):
-    print("-------------------")
-    print(request.method)
-    if request.method == 'POST':
-        print("-------------------")
-        try:
-            data = json.loads(request.body)
-            print(data)
-            category = data.get('category')
-            sub_category = data.get('sub_category')
+# @csrf_exempt
+# def category_post_api(request):
+#     print("-------------------")
+#     print(request.method)
+#     if request.method == 'POST':
+#         print("-------------------")
+#         try:
+#             data = json.loads(request.body)
+#             print(data)
+#             category = data.get('category')
+#             sub_category = data.get('sub_category')
             
-            # Create and save new Category_subcategory object
-            new_category = Category_subcategory(category=category, sub_category=sub_category)
-            new_category.save()
+#             # Create and save new Category_subcategory object
+#             new_category = Category_subcategory(category=category, sub_category=sub_category)
+#             new_category.save()
 
-            response_data = {
-                "message": "successfully data inserted",
-                'id': new_category.id,
-                'category': new_category.category,
-                'sub_category': new_category.sub_category,
-            }
-            return JsonResponse(response_data, status=201)
-        except json.JSONDecodeError:
-            return JsonResponse({'error': 'Invalid JSON'}, status=400)
-        except KeyError:
-            return JsonResponse({'error': 'Missing category or sub_category'}, status=400)
-    else:
-        return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
+#             response_data = {
+#                 "message": "successfully data inserted",
+#                 'id': new_category.id,
+#                 'category': new_category.category,
+#                 'sub_category': new_category.sub_category,
+#             }
+#             return JsonResponse(response_data, status=201)
+#         except json.JSONDecodeError:
+#             return JsonResponse({'error': 'Invalid JSON'}, status=400)
+#         except KeyError:
+#             return JsonResponse({'error': 'Missing category or sub_category'}, status=400)
+#     else:
+#         return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
 
-@csrf_exempt
-def book_post_api(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        serializer = BookSerializer(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
-    else:
-        return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
+# @csrf_exempt
+# def book_post_api(request):
+#     if request.method == 'POST':
+#         data = json.loads(request.body)
+#         serializer = BookSerializer(data=data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return JsonResponse(serializer.data, status=201)
+#         return JsonResponse(serializer.errors, status=400)
+#     else:
+#         return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
 
-def subcategory_function(request):
-    if request.method == 'GET':
-        print("---------------------")
-        # Fetch all records from the view
-        cat = Subcategory.objects.select_related('category').values('subcategory_name').annotate(num_occurrences=Count('id'))
-        print("----------------------")
-        serializer = SubcategorySerialize(cat, many = True)
-        print("serializer",serializer.data)
-        return render(request, 'subcategory_template.html', {
-            'sub_categories': serializer.data
-        })
+# def subcategory_function(request):
+#     if request.method == 'GET':
+#         print("---------------------")
+#         # Fetch all records from the view
+#         cat = Subcategory.objects.select_related('category').values('subcategory_name').annotate(num_occurrences=Count('id'))
+#         print("----------------------")
+#         serializer = SubcategorySerialize(cat, many = True)
+#         print("serializer",serializer.data)
+#         return render(request, 'subcategory_template.html', {
+#             'sub_categories': serializer.data
+#         })
   
-    else:
-        # Handle invalid HTTP method
-        return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
+#     else:
+#         # Handle invalid HTTP method
+#         return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
