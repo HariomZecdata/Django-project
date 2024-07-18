@@ -9,31 +9,29 @@ from django.core.cache import cache
 from django.http import JsonResponse
 
 def my_view_function(request):
-    if request.method == 'GET':
-        # Define cache key
-        cache_key = 'all_categories'
-        # Try to get data from cache
-        cached_data = cache.get(cache_key)
-        # print("cached_data",cached_data)
-        if cached_data:
-            # Use cached data if available
-            serializer_data = cached_data
-            print("Using cached data")
-        else:
-            # Fetch all records from the database
-            cat = Category_subcategory.objects.all()
-            serializer = CategorySerializer(cat, many=True)
-            serializer_data = serializer.data
-            # Cache the serialized data for 15 minutes
-            cache.set(cache_key, serializer_data, timeout=900)  # 15 minutes
-            print("Using database data")
-
-        return render(request, 'my_template.html', {
-            'categories': serializer_data
-        })
-    else:
-        # Handle invalid HTTP method
-        return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
+    # if request.method == 'GET':
+    #     # Define cache key
+    #     cache_key = 'all_categories'
+    #     # Try to get data from cache
+    #     cached_data = cache.get(cache_key)
+    #     # print("cached_data",cached_data)
+    #     if cached_data:
+    #         # Use cached data if available
+    #         serializer_data = cached_data
+    #         print("Using cached data")
+    #     else:
+    #         # Fetch all records from the database
+    #         cat = Category_subcategory.objects.all()
+    #         serializer = CategorySerializer(cat, many=True)
+    #         serializer_data = serializer.data
+    #         # Cache the serialized data for 15 minutes
+    #         cache.set(cache_key, serializer_data, timeout=900)  # 15 minutes
+    #         print("Using database data")
+            # 'categories': serializer_data
+        return render(request, 'my_template.html')
+    # else:
+    #     # Handle invalid HTTP method
+    #     return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
 def category_group_by_view(request):
     category_counts = Category_subcategory.objects.values('sub_category').annotate(num_occurrences=Count('category')).filter(num_occurrences__gt=2)
     context = {
