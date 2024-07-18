@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Category Group By</title>
+</head>
+<body>
+    <h1>Category Group By</h1>
+    <table>
+        <tr>
+            <th>Sub_Category</th>
+            <th>Number of Occurrences</th>
+        </tr>
+        {% for entry in category_counts %}
+        <tr>
+            <td>{{ entry.sub_category }}</td>
+            <td>{{ entry.num_occurrences }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
